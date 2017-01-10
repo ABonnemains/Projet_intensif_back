@@ -56,10 +56,21 @@ router.post('/register', function(req, res) {
   });
 });
 
+/* POST Login user
+ * Consumes JSON : { login, password }
+ *  login                 : Pseudo de l'utilisateur
+ *  password              : Mot de passe de l'utilisateur
+ * Returns:
+ *  404 Not Found         : le login de l'utilisateur n'existe pas en base
+ *  500 Server Error      : Erreur lors de la lecture ou l'écriture dans la base
+ *  200 OK                : Login s'est bien passé + retourne un objet contenant le token de connexion
+ */
 router.post('/login', function(req, res) {
+  // requêtes SQL
   var selectQuery = 'SELECT count(utilisateur_id) as count, utilisateur_mot_de_passe as mdp FROM utilisateur WHERE utilisateur_pseudo = ?';
   var updateQuery = 'UPDATE utilisateur SET utilisateur_token = ? WHERE utilisateur_pseudo = ?';
 
+  // Vérification de la présence du login en base
   pool.query(selectQuery, req.body.login, function(error, rows) {
     if (error) res.sendStatus(500);
     
@@ -67,13 +78,16 @@ router.post('/login', function(req, res) {
       res.sendStatus(404);
     }
     else {
+      // Vérification du mot de passe
       bcrypt.compare(req.body.password, rows[0].mdp, function(err, rightPass) {
         if (err) res.sendStatus(500);
         console.log(rightPass);
 
         if (rightPass) {
+          // Création d'un token de connexion
           var token = crypto.randomBytes(48).toString('base64');
 
+          // Enregistrement du token en base
           pool.query(updateQuery, [token, req.body.login], function(err2, result) {
             if (err2) res.sendStatus(500);
 
