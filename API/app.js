@@ -2,6 +2,7 @@
 var express = require('express');
 var parser = require('body-parser');
 var authentication = require('./routes/route_authentication');
+var traject = require('./routes/route_traject');
 
 config = require('./config/config.json');
 pool = require('./utils/mysql_pool');
@@ -25,6 +26,7 @@ app.use(allowCrossDomain);
 
 // Routes configuration
 app.use('/authentication', authentication);
+app.use('/traject', traject);
 
 // Server startup
 app.listen(3000, function () {
