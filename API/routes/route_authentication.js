@@ -2,6 +2,7 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
 var mysql = require('mysql');
+var crypto = require('crypto');
 
 var router = express.Router();
 
@@ -34,7 +35,7 @@ router.post('/register', function(req, res) {
       utilisateur_nom:                     req.body.user_name,
       utilisateur_prenom:                  req.body.user_surname,
       utilisateur_portable:                req.body.user_phone,
-      utilisateur_date_naissance:          req.body.user_birthdate,
+      utilisateur_date_naissance:          new Date(req.body.user_birthdate),
       utilisateur_pseudo:                  req.body.login,
       utilisateur_date_creation:           new Date(),
       utilisateur_date_modification:       new Date(),
@@ -53,6 +54,39 @@ router.post('/register', function(req, res) {
     });
 
   });
+});
+
+router.post('/login', function(req, res) {
+  var selectQuery = 'SELECT count(utilisateur_id) as count, utilisateur_mot_de_passe as mdp FROM utilisateur WHERE utilisateur_pseudo = ?';
+  var updateQuery = 'UPDATE utilisateur SET utilisateur_token = ? WHERE utilisateur_pseudo = ?';
+
+  pool.query(selectQuery, req.body.login, function(error, rows) {
+    if (error) res.sendStatus(500);
+    
+    if (rows[0].count === 0){ 
+      res.sendStatus(404);
+    }
+    else {
+      bcrypt.compare(req.body.password, rows[0].mdp, function(err, rightPass) {
+        if (err) res.sendStatus(500);
+        console.log(rightPass);
+
+        if (rightPass) {
+          var token = crypto.randomBytes(48).toString('base64');
+
+          pool.query(updateQuery, [token, req.body.login], function(err2, result) {
+            if (err2) res.sendStatus(500);
+
+            res.status(200).json({token: token});
+          });
+        }
+        else {
+          res.sendStatus(401);
+        }
+      });
+    }
+  });
+  
 });
 
 // Export for public usage
