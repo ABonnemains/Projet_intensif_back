@@ -1,0 +1,9 @@
+{
+    "mysql_config" : {
+        "connectionLimit": 10,
+        "host": "localhost",
+        "user": "root",
+        "password" : "root",
+        "database": "roule_ma_poule"
+    }
+}
