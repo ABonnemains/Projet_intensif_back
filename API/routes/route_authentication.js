@@ -55,5 +55,9 @@ router.post('/register', function(req, res) {
   });
 });
 
+router.post('/login', function(req, res) {
+  res.sendStatus(200);
+});
+
 // Export for public usage
 module.exports = router;
