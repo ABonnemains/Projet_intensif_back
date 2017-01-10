@@ -1,7 +1,10 @@
 // Require dependencies
 var express = require('express');
 var parser = require('body-parser');
-var authentication = require('./routes/authentication');
+var authentication = require('./routes/route_authentication');
+
+config = require('./config/config.json');
+pool = require('./utils/mysql_pool');
 
 // Application initialization
 var app = express();
