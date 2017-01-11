@@ -85,7 +85,7 @@ router.post('/login', function(req, res) {
 
         if (rightPass) {
           // Création d'un token de connexion
-          var token = crypto.randomBytes(48).toString('base64');
+          var token = crypto.randomBytes(30).toString('hex');
 
           // Enregistrement du token en base
           pool.query(updateQuery, [token, req.body.login], function(err2, result) {
