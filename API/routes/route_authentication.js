@@ -157,5 +157,49 @@ router.post('/update', function(req, res) {
   });
 });
 
+/* GET Get user profile
+ * URL Parameters
+ *  token : Token de connexion fourni par la méthode login
+ *  login : Pseudo de l'utilisateur à chercher'
+ * Returns:
+ *  400 Bad Request       : password et password_confirmation différents
+ *  500 Server Error      : Erreur lors de l'enregistrement dans la base
+ *  200 OK                : Update s'est bien passé
+ *  JSON Object: 
+ *    user_name      : Nom de l'utilisateur
+ *    user_surname   : Prénom de l'utilisateur
+ *    user_phone     : Numéro de téléphone de l'utilisateur
+ *    user_birthdate : Date de naissance de l'utilisateur
+ */
+router.get('/profile/:token/:login', function(req, res) {
+  loginUtils.checkConnection(req.params.token).then(function(logged) {
+    if (logged) {
+      // requête SQL
+      var selectQuery = "SELECT * FROM utilisateur WHERE utilisateur_pseudo = ?";
+
+      pool.query(selectQuery, req.params.login, function(err, rows) {
+        if (err) res.sendStatus(500);
+        console.log(rows);
+        if (rows.length > 0) {
+          var data = {
+            user_name     : rows[0].utilisateur_nom,
+            user_surname  : rows[0].utilisateur_prenom,
+            user_phone    : rows[0].utilisateur_portable,
+            user_birthdate: new Date(rows[0].utilisateur_date_naissance).getTime()
+          }
+
+          res.status(200).json(data);
+        }
+        else {
+          res.sendStatus(404);
+        }
+      });
+    }
+    else {
+      res.sendStatus(403);
+    }
+  });
+});
+
 // Export for public usage
 module.exports = router;
