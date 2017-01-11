@@ -7,10 +7,12 @@ var router = express.Router();
 // Routes configurations
 
 /*
+
    Function: Create mark object
 
    Permet à un utilisateur de noter un obstacle/alerte.
    * POST
+   * URL : {{url}}/mark_object/create
    * Consumes JSON : { token, obstacle_note, obstacle_id, utilisateur_id }
 
    Parameters:

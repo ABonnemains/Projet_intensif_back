@@ -4,10 +4,12 @@ var express = require('express');
 var router = express.Router();
 
 /*
-  Function: Register new user
 
-  Creation d'une note d'évènement.
+  Function: Create event
+
+  Creation d'un évènement.
   * POST
+  * URL : {{url}}/event/create
   * Consumes JSON : { token, event_name, event_longitude, event_latitude,
                       event_timestamp, event_description }
 
@@ -54,10 +56,12 @@ router.post('/create', function(req, res) {
 });
 
 /*
-  Function: List
+
+  Function: List events
 
   Liste des positions des évènements à proximité.
   * GET
+  * URL : {{url}}/list/:token/:latitude/:longitude
   * Consumes URL Parameters : { token, longitude, latitude }
 
   Parameters:

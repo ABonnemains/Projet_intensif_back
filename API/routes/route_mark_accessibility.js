@@ -7,10 +7,12 @@ var router = express.Router();
 // Routes configurations
 
 /*
-  Function: Create
 
-  Création d'une note d'accessibilité.
+  Function: Create accessibility note
+
+  Création d'une note d'accessibilité du trajet.
   * POST
+  * URL : {{url}}/mark_accessibility/create
   * Consumes JSON : { trajet_note, trajet_id, utilisateur_id }
 
   Parameters:

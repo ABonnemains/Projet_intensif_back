@@ -7,10 +7,12 @@ var router = express.Router();
 // Routes configurations
 
 /*
+
    Function: Create mark traject
 
    Permet à un utilisateur de noter un trajet.
    * POST
+   * URL : {{url}}/mark_traject/create
    * Consumes JSON : { token, note_trajet_note, trajet_trajet_id, utilisateur_id }
 
    Parameters:

@@ -7,11 +7,13 @@ var router = express.Router();
 // Routes configurations
 
 /*
+
    Function: Create traject
 
    Crée un nouveau trajet.
    * POST
-   * Consumes JSON : { token, trajet_longitude_depart, trajet_latitude_depart, trajet_longitude_arrivee, 
+   * URL : {{url}}/traject/create
+   * Consumes JSON : { token, trajet_longitude_depart, trajet_latitude_depart, trajet_longitude_arrivee,
                        trajet_latitude_arrivee, trajet_public, utilisateur_id }
 
    Parameters:
@@ -61,10 +63,12 @@ router.post('/create', function(req, res) {
 });
 
 /*
+
    Function: Update traject
 
    Permet de mettre à jour le statut publique d'un trajet.
    * POST
+   * URL : {{url}}/traject/update
    * Consumes JSON : { trajet_id, trajet_public, utilisateur_id }
 
    Parameters:

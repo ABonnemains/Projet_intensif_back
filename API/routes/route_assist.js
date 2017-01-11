@@ -7,10 +7,12 @@ var router = express.Router();
 // Routes configurations
 
  /*
+
    Function: Create assist
 
    Creation d'une demande d'assistance.
    * POST
+   * URL : {{url}}/assist/create
    * Consumes JSON : { utilisateur_id_2, trajet_longitude_arrivee, trajet_latitude_arrivee,
                      trajet_public, utilisateur_id }
 
@@ -27,7 +29,7 @@ var router = express.Router();
    *  403 Forbidden         : Token de connexion invalide
    *  500 Server Error      : Erreur lors de l'enregistrement dans la base
    *  200 OK                : Create s'est bien passé
-   
+
 */
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){

@@ -7,10 +7,12 @@ var router = express.Router();
 // Routes configurations
 
 /*
+
    Function: Create obstacle
 
    Crée un nouvel obstacle/alerte.
    * POST
+   * URL : {{url}}/obstacle/create
    * Consumes JSON : { token, description, type, longitude, latitude, utilisateur_id }
 
    Parameters:

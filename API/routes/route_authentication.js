@@ -13,6 +13,7 @@ var router = express.Router();
 
   Creation d'une demande d'assistance.
   * POST
+  * URL : {{url}}/authentication/register
   * Consumes JSON : { login, password, password_confirmation, user_name,
                       user_surname, user_phone, user_birthdate }
 
@@ -71,6 +72,7 @@ router.post('/register', function(req, res) {
 
   Connexion de l'utilisateur.
   * POST
+  * URL : {{url}}/authentication/login
   * Consumes JSON : { login, password }
 
   Parameters:
@@ -125,8 +127,9 @@ router.post('/login', function(req, res) {
 /*
   Function: Update user
 
-  Connexion de l'utilisateur.
+  Mise à jour de l'utilisateur.
   * POST
+  * URL : {{url}}/authentication/update
   * Consumes JSON : { token, password, password_confirmation, user_name,
                       user_surname, user_birthdate }
 
@@ -188,10 +191,12 @@ router.post('/update', function(req, res) {
 });
 
 /*
+
   Function: Get user profile
 
   Récupérer le profil de l'utilisateur.
   * GET
+  * URL : {{url}}/profile/:token/:login
   * Consumes URL Parameters : { token, login }
 
   Parameters:
@@ -243,10 +248,12 @@ router.get('/profile/:token/:login', function(req, res) {
 });
 
 /*
+
   Function: Top users
 
   Verification du classement de l'utilisateur.
   * GET
+  * URL : {{url}}/top/:token
   * Consumes URL Parameter : { token }
 
   Parameters:
@@ -301,10 +308,11 @@ router.get('/top/:token', function(req, res) {
 });
 
 /*
-  Function: Search
+  Function: Search user
 
   Recherche des utilisateurs.
   * GET
+  * URL : {{url}}/search/:token/:sstring
   * Consumes URL Parameter : { token, string }
 
   Parameters:

@@ -7,10 +7,12 @@ var router = express.Router();
 // Routes configurations
 
 /*
-   Function: Subscribe to Event
+
+   Function: Subscribe to event
 
    Enregistre un nouvel utilisateur en base.
    * POST
+   * URL : {{url}}/user_event/create
    * Consumes JSON : { token, utilisateur_id, evenement_id }
 
    Parameters:
