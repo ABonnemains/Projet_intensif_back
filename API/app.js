@@ -10,6 +10,7 @@ var traject = require('./routes/route_traject');
 var assist = require('./routes/route_assist');
 var evenmt = require('./routes/route_event');
 var mark_traject = require('./routes/route_mark_traject');
+var mark_accessibility = require('./routes/route_mark_accessibility');
 
 // Application initialization
 var app = express();
@@ -36,7 +37,7 @@ app.use('/traject', traject);
 app.use('/assist', assist);
 app.use('/event', evenmt);
 app.use('/mark_traject', mark_traject);
-
+app.use('/mark_accessibility', mark_accessibility);
 
 // Server startup
 app.listen(app.get('port'), function () {
