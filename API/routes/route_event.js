@@ -43,5 +43,46 @@ router.post('/create', function(req, res) {
     })
 });
 
+
+/* GET Get near events
+ * URL Parameters
+ *  token     : Token de connexion fourni par la méthode login
+ *  latitude  : Nom du nouvel évènement
+ *  longitude : Longitude de l'évènement
+ * Returns:
+ *  403 Forbidden     : Mauvais token ou token expiré
+ *  500 Server Error  : Erreur lors de la lecture dans la base
+ *  200 OK            : Get s'est bien passé
+ */
+router.get('/list/:token/:latitude/:longitude', function(req, res) {
+    loginUtils.checkConnection(req.params.token).then(function(logged) {
+        if (logged) {
+            var selectQuery = "SELECT * FROM evenement";
+            var events = [];
+
+            pool.query(selectQuery, function(err, rows) {
+                if (err) res.sendStatus(500);
+                
+                for (var i = 0; i < rows.length; i++) {
+                    var data = {
+                        event_name: rows[i].evenement_nom,
+                        event_longitude: rows[i].evenement_longitude,
+                        event_latitude: rows[i].evenement_latitude,
+                        event_timestamp: new Date(rows[i].evenement_dateheure).getTime(),
+                        event_description: rows[i].evenement_description
+                    };
+
+                    events.push(data);
+                }
+
+                res.status(200).json(events);
+            });
+        }
+        else {
+            res.sendStatus(403);
+        }
+    });
+});
+
 // Export for public usage
 module.exports = router;

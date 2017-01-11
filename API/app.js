@@ -8,10 +8,12 @@ var parser = require('body-parser');
 var authentication = require('./routes/route_authentication');
 var traject = require('./routes/route_traject');
 var assist = require('./routes/route_assist');
-var event = require('./routes/route_event');
+var evenmt = require('./routes/route_event');
 
 // Application initialization
 var app = express();
+
+app.set('port', (process.env.PORT || 3000));
 
 //CORS middleware
 var allowCrossDomain = function(req, res, next) {
@@ -31,9 +33,9 @@ app.use(allowCrossDomain);
 app.use('/authentication', authentication);
 app.use('/traject', traject);
 app.use('/assist', assist);
-app.use('/event', event);
+app.use('/event', evenmt);
 
 // Server startup
-app.listen(3000, function () {
+app.listen(app.get('port'), function () {
     console.log('API started on port 3000.');
 });
