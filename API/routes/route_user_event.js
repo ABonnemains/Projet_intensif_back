@@ -1,31 +1,31 @@
+/* Title: route_user_event */
 // Dependencies requirements
 var express = require('express');
 var mysql = require('mysql');
 
+// Routes configurations
 var router = express.Router();
 
-// Routes configurations
 
 /*
+  Function: Subscribe to event
 
-   Function: Subscribe to event
+  Enregistre un nouvel utilisateur en base.
+  * POST
+  * URL : {{url}}/user_event/create
+  * Consumes JSON : { token, utilisateur_id, evenement_id }
 
-   Enregistre un nouvel utilisateur en base.
-   * POST
-   * URL : {{url}}/user_event/create
-   * Consumes JSON : { token, utilisateur_id, evenement_id }
+  Parameters:
 
-   Parameters:
+  * token          : Token de connexion fourni par la méthode login
+  * utilisateur_id : Identifiant de l'utilisateur
+  * evenement_id   : Identifiant de l'évènement
 
-      * token          : Token de connexion fourni par la méthode login
-      * utilisateur_id : Identifiant de l'utilisateur
-      * evenement_id   : Identifiant de l'évènement
+  Returns:
 
-   Returns:
-
-      * 403 Forbidden    : Mauvais token ou token expiré
-      * 500 Server Error : Erreur lors de l'enregistrement dans la base
-      * 200 OK           : Create s'est bien passé
+  * 403 Forbidden    : Mauvais token ou token expiré
+  * 500 Server Error : Erreur lors de l'enregistrement dans la base
+  * 200 OK           : Create s'est bien passé
 
 */
 router.post('/create', function(req, res) {

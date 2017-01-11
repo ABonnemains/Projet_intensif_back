@@ -1,34 +1,34 @@
+/* Title: route_assist */
 // Dependencies requirements
 var express = require('express');
 var mysql = require('mysql');
 
+// Routes configurations
 var router = express.Router();
 
-// Routes configurations
 
  /*
+  Function: Create assist
 
-   Function: Create assist
-
-   Creation d'une demande d'assistance.
-   * POST
-   * URL : {{url}}/assist/create
-   * Consumes JSON : { utilisateur_id_2, trajet_longitude_arrivee, trajet_latitude_arrivee,
+  Creation d'une demande d'assistance.
+  * POST
+  * URL : {{url}}/assist/create
+  * Consumes JSON : { utilisateur_id_2, trajet_longitude_arrivee, trajet_latitude_arrivee,
                      trajet_public, utilisateur_id }
 
-   Parameters:
+  Parameters:
 
-   * token                 : Token
-   * utilisateur_id_2      : Identifiant de l'utilsateur portant assistance
-   * assistance_longitude  : Longitude du point d'assistance
-   * assistance_latitude   : Latitude du point d'assistance
-   * utilisateur_id        : Identifiant de l'utilisateur
+  * token                 : Token
+  * utilisateur_id_2      : Identifiant de l'utilsateur portant assistance
+  * assistance_longitude  : Longitude du point d'assistance
+  * assistance_latitude   : Latitude du point d'assistance
+  * utilisateur_id        : Identifiant de l'utilisateur
 
-   Returns:
+  Returns:
 
-   *  403 Forbidden         : Token de connexion invalide
-   *  500 Server Error      : Erreur lors de l'enregistrement dans la base
-   *  200 OK                : Create s'est bien passé
+  *  403 Forbidden         : Token de connexion invalide
+  *  500 Server Error      : Erreur lors de l'enregistrement dans la base
+  *  200 OK                : Create s'est bien passé
 
 */
 router.post('/create', function(req, res) {
