@@ -219,19 +219,22 @@ router.get('/top/:token', function(req, res) {
       pool.query(selectQuery, function(err, rows) {
         if (err) res.sendStatus(500);
 
+        var users = [];
         for (var i = 0; i < rows.length; i++) {
           var data = {
-            user_name     : rows[0].utilisateur_nom,
-            user_surname  : rows[0].utilisateur_prenom,
-            user_phone    : rows[0].utilisateur_portable,
-            user_birthdate: new Date(rows[0].utilisateur_date_naissance).getTime(),
+            user_id       : rows[i].utilisateur_id,
+            user_name     : rows[i].utilisateur_nom,
+            user_surname  : rows[i].utilisateur_prenom,
+            user_phone    : rows[i].utilisateur_portable,
+            user_birthdate: new Date(rows[i].utilisateur_date_naissance).getTime(),
             user_score    : rows[i].utilisateur_score
           }
 
-          res.status(200).json(data);
+          users.push(data);
         }
         
-        res.sendStatus(404);
+        if (users.length > 0) res.status(200).json(users);
+        else res.sendStatus(404);
       });
     }
     else {
