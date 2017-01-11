@@ -162,9 +162,10 @@ router.post('/update', function(req, res) {
  *  token : Token de connexion fourni par la méthode login
  *  login : Pseudo de l'utilisateur à chercher'
  * Returns:
- *  400 Bad Request       : password et password_confirmation différents
- *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Update s'est bien passé
+ *  404 Not Found         : le profil demandé n'a pas été trouvé
+ *  403 Forbidden         : le token fourni n'est pas valide     
+ *  500 Server Error      : Erreur lors de la lecture dans la base
+ *  200 OK                : Get s'est bien passé
  *  JSON Object: 
  *    user_name      : Nom de l'utilisateur
  *    user_surname   : Prénom de l'utilisateur
@@ -179,7 +180,7 @@ router.get('/profile/:token/:login', function(req, res) {
 
       pool.query(selectQuery, req.params.login, function(err, rows) {
         if (err) res.sendStatus(500);
-        console.log(rows);
+
         if (rows.length > 0) {
           var data = {
             user_name     : rows[0].utilisateur_nom,
@@ -193,6 +194,44 @@ router.get('/profile/:token/:login', function(req, res) {
         else {
           res.sendStatus(404);
         }
+      });
+    }
+    else {
+      res.sendStatus(403);
+    }
+  });
+});
+
+/* GET Top users
+ * URL Parameters:
+ *  token: Token de connexion fourni par la méthode login
+ * Returns:
+ *  403 Forbidden    : le token fourni n'est pas valide
+ *  500 Server Error : Erreur lors de la lecture dans la base
+ *  200 OK           : Get s'est bien passé
+ */
+router.get('/top/:token', function(req, res) {
+  loginUtils.checkConnection(req.params.token).then(function(logged) {
+    if (logged) {
+      // requête SQL
+      var selectQuery = "SELECT * FROM utilisateur ORDER BY utilisateur_score DESC LIMIT 100";
+
+      pool.query(selectQuery, function(err, rows) {
+        if (err) res.sendStatus(500);
+
+        for (var i = 0; i < rows.length; i++) {
+          var data = {
+            user_name     : rows[0].utilisateur_nom,
+            user_surname  : rows[0].utilisateur_prenom,
+            user_phone    : rows[0].utilisateur_portable,
+            user_birthdate: new Date(rows[0].utilisateur_date_naissance).getTime(),
+            user_score    : rows[i].utilisateur_score
+          }
+
+          res.status(200).json(data);
+        }
+        
+        res.sendStatus(404);
       });
     }
     else {
