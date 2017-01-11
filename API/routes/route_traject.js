@@ -49,5 +49,34 @@ router.post('/create', function(req, res) {
   });
 });
 
+
+/* POST Register new user
+ * Consumes JSON : { trajet_id, trajet_public, utilisateur_id }
+ *  trajet_id                : Identifiant du trajet
+ *  trajet_public            : Trajet public ou privé
+ * Returns:
+ *  400 Bad Request       : password et password_confirmation différents
+ *  500 Server Error      : Erreur lors de l'enregistrement dans la base
+ *  200 OK                : Register s'est bien passé
+ */
+router.post('/update', function(req, res) {
+    loginUtils.checkConnection(req.body.token).then(function(logged){
+      if(logged)
+      {
+        // On récupère une connexion du pool et on exécute un INSERT
+        pool.query('UPDATE trajet SET trajet_public=? WHERE trajet_id=?', [req.body.trajet_public, req.body.trajet_id], function(error, result) {
+          if (error) {
+            res.sendStatus(500);
+          }
+
+          res.sendStatus(200);
+        });
+      }
+      else {
+        res.sendStatus(403);
+      }
+  });
+});
+
 // Export for public usage
 module.exports = router;
