@@ -1,10 +1,11 @@
+/* Title: route_event */
 // Dependencies requirements
 var express = require('express');
 
+// Routes configurations
 var router = express.Router();
 
 /*
-
   Function: Create event
 
   Creation d'un évènement.
@@ -56,7 +57,6 @@ router.post('/create', function(req, res) {
 });
 
 /*
-
   Function: List events
 
   Liste des positions des évènements à proximité.

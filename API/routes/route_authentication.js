@@ -1,12 +1,13 @@
+/* Title: route_authentication */
 // Dependencies requirements
 var express = require('express');
 var bcrypt = require('bcrypt');
 var mysql = require('mysql');
 var crypto = require('crypto');
 
+// Routes configurations
 var router = express.Router();
 
-// Routes configurations
 
 /*
   Function: Register new user
@@ -191,7 +192,6 @@ router.post('/update', function(req, res) {
 });
 
 /*
-
   Function: Get user profile
 
   Récupérer le profil de l'utilisateur.
@@ -248,7 +248,6 @@ router.get('/profile/:token/:login', function(req, res) {
 });
 
 /*
-
   Function: Top users
 
   Verification du classement de l'utilisateur.

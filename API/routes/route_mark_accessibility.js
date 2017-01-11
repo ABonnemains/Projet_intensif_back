@@ -1,13 +1,12 @@
+/* Title: route_mark_accessibility */
 // Dependencies requirements
 var express = require('express');
 var mysql = require('mysql');
 
+// Routes configurations
 var router = express.Router();
 
-// Routes configurations
-
 /*
-
   Function: Create accessibility note
 
   Création d'une note d'accessibilité du trajet.
