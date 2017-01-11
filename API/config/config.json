@@ -1,9 +1,9 @@
 {
     "mysql_config" : {
         "connectionLimit": 10,
-        "host": "localhost",
-        "user": "root",
-        "password" : "root",
-        "database": "roule_ma_poule"
+        "host": "us-cdbr-iron-east-04.cleardb.net",
+        "user": "b16b013751925e",
+        "password" : "580e8e44",
+        "database": "heroku_e537be0d8e8c6c2"
     }
 }
