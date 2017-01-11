@@ -9,15 +9,15 @@ var router = express.Router();
 /* POST Create an assist demand
  * Consumes JSON : { utilisateur_id_2, trajet_longitude_arrivee, trajet_latitude_arrivee,
  *                   trajet_public, utilisateur_id }
- *  token                      : Token
- *  utilisateur_id_2           : Identifiant de l'utilsateur portant assistance
- *  assistance_longitude       : Longitude du point d'assistance
- *  assistance_latitude        : Latitude du point d'assistance
- *  utilisateur_id             : Identifiant de l'utilisateur
+ *  token                 : Token
+ *  utilisateur_id_2      : Identifiant de l'utilsateur portant assistance
+ *  assistance_longitude  : Longitude du point d'assistance
+ *  assistance_latitude   : Latitude du point d'assistance
+ *  utilisateur_id        : Identifiant de l'utilisateur
  * Returns:
- *  400 Bad Request       : password et password_confirmation différents
+ *  403 Forbidden         : Token de connexion invalide
  *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Register s'est bien passé
+ *  200 OK                : Create s'est bien passé
  */
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){

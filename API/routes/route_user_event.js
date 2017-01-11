@@ -8,10 +8,11 @@ var router = express.Router();
 
 /* POST Register new user
  * Consumes JSON : { utilisateur_id, evenement_id }
+ *  token                    : Token de connexion fourni par la méthode login
  *  utilisateur_id           : Identifiant de l'utilisateur
  *  evenement_id             : Identifiant de l'évènement
  * Returns:
- *  400 Bad Request       : password et password_confirmation différents
+ *  403 Forbidden         : Mauvais token ou token expiré
  *  500 Server Error      : Erreur lors de l'enregistrement dans la base
  *  200 OK                : Create s'est bien passé
  */
