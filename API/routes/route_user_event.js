@@ -8,21 +8,18 @@ var router = express.Router();
 
 /*
 
-   Function: Create obstacle
+   Function: Subscribe to event
 
-   Crée un nouvel obstacle/alerte.
+   Enregistre un nouvel utilisateur en base.
    * POST
-   * URL : {{url}}/obstacle/create
-   * Consumes JSON : { token, description, type, longitude, latitude, utilisateur_id }
+   * URL : {{url}}/user_event/create
+   * Consumes JSON : { token, utilisateur_id, evenement_id }
 
    Parameters:
 
-      * token:           Token de connexion fourni par la méthode login
-      * description:     Description de l'obstacle
-      * type:            Type d'obstacle
-      * longitude:       Position longitudinale de l'obstacle
-      * latitude:        Position latitudinale de l'obstacle
-      * utilisateur_id:  Identifiant de l'utilisateur
+      * token          : Token de connexion fourni par la méthode login
+      * utilisateur_id : Identifiant de l'utilisateur
+      * evenement_id   : Identifiant de l'évènement
 
    Returns:
 
@@ -37,15 +34,12 @@ router.post('/create', function(req, res) {
       {
         // Initialisation des valeurs à rentrer dans la BDD
         var data = {
-          obstacle_description:       req.body.description,
-          obstacle_type:              req.body.type,
-          obstacle_longitude:         req.body.longitude,
-          obstacle_latitude:          req.body.latitude,
-          utilisateur_utilisateur_id: req.body.utilisateur_id
+          utilisateur_evenement_utilisateur_id: req.body.utilisateur_id,
+          utilisateur_evenement_evenement_id:   req.body.evenement_id,
         };
 
         // On récupère une connexion du pool et on exécute un INSERT
-        pool.query('INSERT INTO obstacle SET ?', data, function(error, result) {
+        pool.query('INSERT INTO utilisateur_evenement SET ?', data, function(error, result) {
           if (error) {
             res.sendStatus(500);
           }

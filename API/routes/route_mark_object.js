@@ -6,16 +6,29 @@ var router = express.Router();
 
 // Routes configurations
 
-/* POST Register new user
- * Consumes JSON : { obstacle_note, obstacle_id, utilisateur_id }
- *  obstacle_note   : Notation de l'obstacle
- *  obstacle_id     : Identifiant de l'obstacle
- *  utilisateur_id  : Identifiant de l'utilisateur
- * Returns:
- *  400 Bad Request       : password et password_confirmation différents
- *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Register s'est bien passé
- */
+/*
+
+   Function: Create mark object
+
+   Permet à un utilisateur de noter un obstacle/alerte.
+   * POST
+   * URL : {{url}}/mark_object/create
+   * Consumes JSON : { token, obstacle_note, obstacle_id, utilisateur_id }
+
+   Parameters:
+
+      * token          : Token de connexion fourni par la méthode login
+      * obstacle_note  : Notation de l'obstacle
+      * obstacle_id    : Identifiant de l'obstacle
+      * utilisateur_id : Identifiant de l'utilisateur
+
+   Returns:
+
+      * 403 Forbidden    : Mauvais token ou token expiré
+      * 500 Server Error : Erreur lors de l'enregistrement dans la base
+      * 200 OK           : Create s'est bien passé
+
+*/
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){
       if(logged)

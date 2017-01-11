@@ -3,20 +3,32 @@ var express = require('express');
 
 var router = express.Router();
 
-/* POST Create new event
- * Consumes JSON : { token, event_name, event_longitude, event_latitude, 
- *                   event_timestamp, event_description }
- *  token             : Token de connexion fourni par la méthode login
- *  event_name        : Nom du nouvel évènement
- *  event_longitude   : Longitude de l'évènement
- *  event_latitude    : Latitude de l'évènement
- *  event_timestamp   : Date et heure de l'évènement
- *  event_description : Description de l'évènement
- * Returns:
- *  403 Forbidden     : Mauvais token ou token expiré
- *  500 Server Error  : Erreur lors de l'enregistrement dans la base
- *  200 OK            : Create s'est bien passé
- */
+/*
+
+  Function: Create event
+
+  Creation d'un évènement.
+  * POST
+  * URL : {{url}}/event/create
+  * Consumes JSON : { token, event_name, event_longitude, event_latitude,
+                      event_timestamp, event_description }
+
+  Parameters:
+
+  *  token             : Token de connexion fourni par la méthode login
+  *  event_name        : Nom du nouvel évènement
+  *  event_longitude   : Longitude de l'évènement
+  *  event_latitude    : Latitude de l'évènement
+  *  event_timestamp   : Date et heure de l'évènement
+  *  event_description : Description de l'évènement
+
+  Returns:
+
+  *  403 Forbidden     : Mauvais token ou token expiré
+  *  500 Server Error  : Erreur lors de l'enregistrement dans la base
+  *  200 OK            : Create s'est bien passé
+
+*/
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged) {
         if (logged) {
@@ -31,7 +43,7 @@ router.post('/create', function(req, res) {
             // On récupère une connexion du pool et on exécute un INSERT
             pool.query('INSERT INTO evenement SET ?', data, function(error, result) {
                 if (error) {
-                    res.sendStatus(500); 
+                    res.sendStatus(500);
                 }
 
                 res.sendStatus(200);
@@ -43,17 +55,28 @@ router.post('/create', function(req, res) {
     })
 });
 
+/*
 
-/* GET Get near events
- * URL Parameters
- *  token     : Token de connexion fourni par la méthode login
- *  latitude  : Nom du nouvel évènement
- *  longitude : Longitude de l'évènement
- * Returns:
- *  403 Forbidden     : Mauvais token ou token expiré
- *  500 Server Error  : Erreur lors de la lecture dans la base
- *  200 OK            : Get s'est bien passé
- */
+  Function: List events
+
+  Liste des positions des évènements à proximité.
+  * GET
+  * URL : {{url}}/list/:token/:latitude/:longitude
+  * Consumes URL Parameters : { token, longitude, latitude }
+
+  Parameters:
+
+  *  token     : Token de connexion fourni par la méthode login
+  *  latitude  : Nom du nouvel évènement
+  *  longitude : Longitude de l'évènement
+
+  Returns:
+
+  *  403 Forbidden     : Mauvais token ou token expiré
+  *  500 Server Error  : Erreur lors de l'enregistrement dans la base
+  *  200 OK            : Get s'est bien passé
+
+*/
 router.get('/list/:token/:latitude/:longitude', function(req, res) {
     loginUtils.checkConnection(req.params.token).then(function(logged) {
         if (logged) {
@@ -62,7 +85,7 @@ router.get('/list/:token/:latitude/:longitude', function(req, res) {
 
             pool.query(selectQuery, function(err, rows) {
                 if (err) res.sendStatus(500);
-                
+
                 for (var i = 0; i < rows.length; i++) {
                     var data = {
                         event_name: rows[i].evenement_nom,

@@ -6,16 +6,29 @@ var router = express.Router();
 
 // Routes configurations
 
-/* POST Register new user
- * Consumes JSON : { trajet_note, trajet_id, utilisateur_id }
- *  trajet_note    : Note du trajet
- *  trajet_id      : Identifiant du trajet
- *  utilisateur_id : Identifiant de l'utilisateur
- * Returns:
- *  400 Bad Request       : password et password_confirmation différents
- *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Register s'est bien passé
- */
+/*
+
+  Function: Create accessibility note
+
+  Création d'une note d'accessibilité du trajet.
+  * POST
+  * URL : {{url}}/mark_accessibility/create
+  * Consumes JSON : { trajet_note, trajet_id, utilisateur_id }
+
+  Parameters:
+
+  *  token          : Token de connexion fourni par la méthode login
+  *  trajet_note    : Note du trajet
+  *  trajet_id      : Identifiant du trajet
+  *  utilisateur_id : Identifiant de l'utilisateur
+
+  Returns:
+
+  *  403 Forbidden         : Mauvais token ou token expiré
+  *  500 Server Error      : Erreur lors de l'enregistrement dans la base
+  *  200 OK                : Create s'est bien passé
+
+*/
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){
       if(logged)
