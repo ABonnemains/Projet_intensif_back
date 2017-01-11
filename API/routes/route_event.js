@@ -3,6 +3,20 @@ var express = require('express');
 
 var router = express.Router();
 
+/* POST Create new event
+ * Consumes JSON : { token, event_name, event_longitude, event_latitude, 
+ *                   event_timestamp, event_description }
+ *  token             : Token de connexion fourni par la méthode login
+ *  event_name        : Nom du nouvel évènement
+ *  event_longitude   : Longitude de l'évènement
+ *  event_latitude    : Latitude de l'évènement
+ *  event_timestamp   : Date et heure de l'évènement
+ *  event_description : Description de l'évènement
+ * Returns:
+ *  403 Forbidden     : Mauvais token ou token expiré
+ *  500 Server Error  : Erreur lors de l'enregistrement dans la base
+ *  200 OK            : Create s'est bien passé
+ */
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged) {
         if (logged) {

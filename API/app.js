@@ -1,3 +1,7 @@
+config = require('./config/config.json');
+pool = require('./utils/mysql_pool');
+loginUtils = require('./utils/login_utils.js');
+
 // Require dependencies
 var express = require('express');
 var parser = require('body-parser');
@@ -5,10 +9,6 @@ var authentication = require('./routes/route_authentication');
 var traject = require('./routes/route_traject');
 var assist = require('./routes/route_assist');
 var event = require('./routes/route_event');
-
-config = require('./config/config.json');
-pool = require('./utils/mysql_pool');
-loginUtils = require('./utils/login_utils.js');
 
 // Application initialization
 var app = express();
