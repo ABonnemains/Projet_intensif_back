@@ -21,31 +21,31 @@ var router = express.Router();
  *  200 OK                : Register s'est bien passé
  */
 router.post('/create', function(req, res) {
-  // Si le mot de passe et la confirmation sont différentes, c'est une 400 Bad Request
-  if (req.body.password !== req.body.password_confirmation)
-    res.sendStatus(400);
+    loginUtils.checkConnection(req.body.token).then(fonction(logged)){
+      if(logged)
+      {
+        // Initialisation des valeurs à rentrer dans la BDD
+        var data = {
+          trajet_longitude_depart:            req.body.trajet_longitude_depart,
+          trajet_latitude_depart:             req.body.trajet_latitude_depart,
+          trajet_longitude_arrivee:           req.body.trajet_longitude_arrivee,
+          trajet_latitude_arrivee:            req.body.trajet_latitude_arrivee,
+          trajet_public:                      req.body.trajet_public,
+          utilisateur_utilisateur_id:         req.body.utilisateur_id
+        };
 
-  // Chiffrage du mot de passe
-  bcrypt.hash(req.body.password, 10, function(err, hash) {
-    // Initialisation des valeurs à rentrer dans la BDD
-    var data = {
-      trajet_longitude_depart:            req.body.trajet_longitude_depart,
-      trajet_latitude_depart:             req.body.trajet_latitude_depart,
-      trajet_longitude_arrivee:           req.body.trajet_longitude_arrivee,
-      trajet_latitude_arrivee:            req.body.trajet_latitude_arrivee,
-      trajet_public:                      req.body.trajet_public,
-      utilisateur_utilisateur_id:         req.body.utilisateur_id
-    };
+        // On récupère une connexion du pool et on exécute un INSERT
+        pool.query('INSERT INTO trajet SET ?', data, function(error, result) {
+          if (error) {
+            res.sendStatus(500);
+          }
 
-    // On récupère une connexion du pool et on exécute un INSERT
-    pool.query('INSERT INTO trajet SET ?', data, function(error, result) {
-      if (error) {
-        res.sendStatus(500);
+          res.sendStatus(200);
+        });
       }
-
-      res.sendStatus(200);
-    });
-
+      else {
+        res.sendStatus(403);
+      }
   });
 });
 
