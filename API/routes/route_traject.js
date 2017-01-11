@@ -6,21 +6,31 @@ var router = express.Router();
 
 // Routes configurations
 
-/* POST Register new user
- * Consumes JSON : { trajet_longitude_depart, trajet_latitude_depart, trajet_longitude_arrivee, trajet_latitude_arrivee,
- *                   trajet_public, utilisateur_id }
- *  token                    : Token de connexion fourni par la méthode login
- *  trajet_longitude_depart  : Longitude du point de départ
- *  trajet_latitude_depart   : Latitude du point de départ
- *  trajet_longitude_arrivee : Longitude du point d'arrivée
- *  trajet_latitude_arrivee  : Latitude du point d'arrivée
- *  trajet_public            : Trajet public ou privé
- *  utilisateur_id           : Identifiant de l'utilisateur
- * Returns:
- *  403 Forbidden         : Mauvais token ou token expiré
- *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Create s'est bien passé
- */
+/*
+   Function: Create traject
+
+   Crée un nouveau trajet.
+   * POST
+   * Consumes JSON : { token, trajet_longitude_depart, trajet_latitude_depart, trajet_longitude_arrivee, 
+                       trajet_latitude_arrivee, trajet_public, utilisateur_id }
+
+   Parameters:
+
+      * token                    : Token de connexion fourni par la méthode login
+      * trajet_longitude_depart  : Longitude du point de départ
+      * trajet_latitude_depart   : Latitude du point de départ
+      * trajet_longitude_arrivee : Longitude du point d'arrivée
+      * trajet_latitude_arrivee  : Latitude du point d'arrivée
+      * trajet_public            : Trajet public ou privé
+      * utilisateur_id           : Identifiant de l'utilisateur
+
+   Returns:
+
+      * 403 Forbidden    : Mauvais token ou token expiré
+      * 500 Server Error : Erreur lors de l'enregistrement dans la base
+      * 200 OK           : Create s'est bien passé
+
+*/
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){
       if(logged)
@@ -50,17 +60,26 @@ router.post('/create', function(req, res) {
   });
 });
 
+/*
+   Function: Update traject
 
-/* POST Register new user
- * Consumes JSON : { trajet_id, trajet_public, utilisateur_id }
- *  token                    : Token de connexion fourni par la méthode login
- *  trajet_id                : Identifiant du trajet
- *  trajet_public            : Trajet public ou privé
- * Returns:
- *  403 Forbidden         : Mauvais token ou token expiré
- *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Register s'est bien passé
- */
+   Permet de mettre à jour le statut publique d'un trajet.
+   * POST
+   * Consumes JSON : { trajet_id, trajet_public, utilisateur_id }
+
+   Parameters:
+
+      * token         : Token de connexion fourni par la méthode login
+      * trajet_id     : Identifiant du trajet
+      * trajet_public : Trajet public ou privé
+
+   Returns:
+
+      * 403 Forbidden    : Mauvais token ou token expiré
+      * 500 Server Error : Erreur lors de l'enregistrement dans la base
+      * 200 OK           : Create s'est bien passé
+
+*/
 router.post('/update', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){
       if(logged)

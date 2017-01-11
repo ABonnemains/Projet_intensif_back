@@ -6,16 +6,26 @@ var router = express.Router();
 
 // Routes configurations
 
-/* POST Register new user
- * Consumes JSON : { utilisateur_id, evenement_id }
- *  token                    : Token de connexion fourni par la méthode login
- *  utilisateur_id           : Identifiant de l'utilisateur
- *  evenement_id             : Identifiant de l'évènement
- * Returns:
- *  403 Forbidden         : Mauvais token ou token expiré
- *  500 Server Error      : Erreur lors de l'enregistrement dans la base
- *  200 OK                : Create s'est bien passé
- */
+/*
+   Function: Subscribe to Event
+
+   Enregistre un nouvel utilisateur en base.
+   * POST
+   * Consumes JSON : { token, utilisateur_id, evenement_id }
+
+   Parameters:
+
+      * token          : Token de connexion fourni par la méthode login
+      * utilisateur_id : Identifiant de l'utilisateur
+      * evenement_id   : Identifiant de l'évènement
+
+   Returns:
+
+      * 403 Forbidden    : Mauvais token ou token expiré
+      * 500 Server Error : Erreur lors de l'enregistrement dans la base
+      * 200 OK           : Create s'est bien passé
+
+*/
 router.post('/create', function(req, res) {
     loginUtils.checkConnection(req.body.token).then(function(logged){
       if(logged)
