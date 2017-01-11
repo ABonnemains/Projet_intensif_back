@@ -110,7 +110,6 @@ router.post('/login', function(req, res) {
  *  password_confirmation : Confirmation du mot de passe du nouvel utilisateur
  *  user_name             : Nom de l'utilisateur
  *  user_surname          : Prénom de l'utilisateur
- *  user_phone            : Numéro de téléphone de l'utilisateur
  *  user_birthdate        : Date de naissance de l'utilisateur
  * Returns:
  *  400 Bad Request       : password et password_confirmation différents
@@ -118,10 +117,10 @@ router.post('/login', function(req, res) {
  *  200 OK                : Update s'est bien passé
  */
 router.post('/update', function(req, res) {
-  loginUtils.checkConnection(req.params.token).then(function(logged) {
+  loginUtils.checkConnection(req.body.token).then(function(logged) {
     if (logged) {
       // Si changement de mot de passe, les deux mots de passe doivent correspondre
-      if (password && password !== password_confirmation) {
+      if (req.body.password && req.body.password !== password_confirmation) {
         res.sendStatus(400);
       }
 
@@ -133,13 +132,12 @@ router.post('/update', function(req, res) {
         var data = {
           utilisateur_nom:                     req.body.user_name,
           utilisateur_prenom:                  req.body.user_surname,
-          utilisateur_portable:                req.body.user_phone,
           utilisateur_date_naissance:          new Date(req.body.user_birthdate),
           utilisateur_date_modification:       new Date(),
           utilisateur_date_derniere_connexion: new Date()
         };
 
-        if (password && password !== "")
+        if (req.body.password && req.body.password !== "")
           data.utilisateur_mot_de_passe = hash;
 
         // On récupère une connexion du pool et on exécute un INSERT
