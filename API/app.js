@@ -9,6 +9,7 @@ var authentication = require('./routes/route_authentication');
 var traject = require('./routes/route_traject');
 var assist = require('./routes/route_assist');
 var event = require('./routes/route_event');
+var obstacle = require('./routes/route_obstacle');
 
 // Application initialization
 var app = express();
@@ -32,6 +33,7 @@ app.use('/authentication', authentication);
 app.use('/traject', traject);
 app.use('/assist', assist);
 app.use('/event', event);
+app.use('/obstacle', obstacle);
 
 // Server startup
 app.listen(3000, function () {
