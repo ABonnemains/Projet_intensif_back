@@ -9,6 +9,8 @@ pool = require('./utils/mysql_pool');
 // Application initialization
 var app = express();
 
+app.set('port', (process.env.PORT || 3000));
+
 //CORS middleware
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -27,6 +29,6 @@ app.use(allowCrossDomain);
 app.use('/authentication', authentication);
 
 // Server startup
-app.listen(3000, function () {
+app.listen(app.get('port'), function () {
     console.log('API started on port 3000.');
 });
