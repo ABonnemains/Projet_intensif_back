@@ -243,5 +243,49 @@ router.get('/top/:token', function(req, res) {
   });
 });
 
+/* GET Search user profiles
+ * URL Parameters
+ *  token  : Token de connexion fourni par la méthode login
+ *  sstring : Chaine de caractère à utiliser pour la recherche
+ * Returns:
+ *  404 Not Found         : aucun profil n'a été trouvé
+ *  403 Forbidden         : le token fourni n'est pas valide     
+ *  500 Server Error      : Erreur lors de la lecture dans la base
+ *  200 OK                : Get s'est bien passé
+ *  JSON Object: 
+ *    user_name      : Nom de l'utilisateur
+ *    user_surname   : Prénom de l'utilisateur
+ *    user_phone     : Numéro de téléphone de l'utilisateur
+ *    user_birthdate : Date de naissance de l'utilisateur
+ */
+router.get('/search/:token/:sstring', function(req, res) {
+  loginUtils.checkConnection(req.params.token).then(function(logged) {
+    if (logged) {
+      // requête SQL
+      var selectQuery = "SELECT * FROM utilisateur WHERE utilisateur_pseudo LIKE ";
+
+      pool.query(selectQuery + "'%" + req.params.sstring + "%'" , function(err, rows) {
+        if (err) res.sendStatus(500);
+
+        var users = [];
+        for (var i = 0; i < rows.length; i++) {
+          var data = {
+            user_id    : rows[i].utilisateur_id,  
+            user_login : rows[i].utilisateur_pseudo            
+          }
+
+          users.push(data);
+        }
+        
+        if (users.length > 0) res.status(200).json(users);
+        else res.sendStatus(404);
+      });
+    }
+    else {
+      res.sendStatus(403);
+    }
+  });
+});
+
 // Export for public usage
 module.exports = router;
