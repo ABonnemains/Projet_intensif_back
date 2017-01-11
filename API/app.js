@@ -13,6 +13,7 @@ var obstacle = require('./routes/route_obstacle');
 var mark_traject = require('./routes/route_mark_traject');
 var mark_accessibility = require('./routes/route_mark_accessibility');
 var mark_object = require('./routes/route_mark_object');
+var user_event = require('./routes/route_user_event');
 
 // Application initialization
 var app = express();
@@ -42,6 +43,7 @@ app.use('/obstacle', obstacle);
 app.use('/mark_traject', mark_traject);
 app.use('/mark_accessibility', mark_accessibility);
 app.use('/mark_object', mark_object);
+app.use('/user_event', user_event);
 
 
 // Server startup
