@@ -7,6 +7,7 @@ var assist = require('./routes/route_assist');
 
 config = require('./config/config.json');
 pool = require('./utils/mysql_pool');
+loginUtils = require('./utils/login_utils.js');
 
 // Application initialization
 var app = express();
