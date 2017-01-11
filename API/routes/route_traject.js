@@ -21,7 +21,7 @@ var router = express.Router();
  *  200 OK                : Register s'est bien passé
  */
 router.post('/create', function(req, res) {
-    loginUtils.checkConnection(req.body.token).then(fonction(logged)){
+    loginUtils.checkConnection(req.body.token).then(function(logged){
       if(logged)
       {
         // Initialisation des valeurs à rentrer dans la BDD
