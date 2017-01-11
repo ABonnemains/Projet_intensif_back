@@ -68,7 +68,7 @@ router.post('/register', function(req, res) {
 router.post('/login', function(req, res) {
   // requêtes SQL
   var selectQuery = 'SELECT count(utilisateur_id) as count, utilisateur_mot_de_passe as mdp FROM utilisateur WHERE utilisateur_pseudo = ?';
-  var updateQuery = 'UPDATE utilisateur SET utilisateur_token = ? WHERE utilisateur_pseudo = ?';
+  var updateQuery = 'UPDATE utilisateur SET utilisateur_token = ?, utilisateur_date_derniere_connexion = ? WHERE utilisateur_pseudo = ?';
 
   // Vérification de la présence du login en base
   pool.query(selectQuery, req.body.login, function(error, rows) {
@@ -88,7 +88,7 @@ router.post('/login', function(req, res) {
           var token = crypto.randomBytes(30).toString('hex');
 
           // Enregistrement du token en base
-          pool.query(updateQuery, [token, req.body.login], function(err2, result) {
+          pool.query(updateQuery, [token, new Date(), req.body.login], function(err2, result) {
             if (err2) res.sendStatus(500);
 
             res.status(200).json({token: token});
@@ -100,7 +100,63 @@ router.post('/login', function(req, res) {
       });
     }
   });
-  
+});
+
+/* POST Update user
+ * Consumes JSON : { token, password, password_confirmation, user_name, 
+ *                   user_surname, user_birthdate }
+ *  token                 : Token de connexion fourni par la méthode login
+ *  password              : Mot de passe du nouvel utilisateur
+ *  password_confirmation : Confirmation du mot de passe du nouvel utilisateur
+ *  user_name             : Nom de l'utilisateur
+ *  user_surname          : Prénom de l'utilisateur
+ *  user_phone            : Numéro de téléphone de l'utilisateur
+ *  user_birthdate        : Date de naissance de l'utilisateur
+ * Returns:
+ *  400 Bad Request       : password et password_confirmation différents
+ *  500 Server Error      : Erreur lors de l'enregistrement dans la base
+ *  200 OK                : Update s'est bien passé
+ */
+router.post('/update', function(req, res) {
+  loginUtils.checkConnection(req.params.token).then(function(logged) {
+    if (logged) {
+      // Si changement de mot de passe, les deux mots de passe doivent correspondre
+      if (password && password !== password_confirmation) {
+        res.sendStatus(400);
+      }
+
+      // requête SQL
+      var updateQuery = "UPDATE utilisateur SET ? WHERE utilisateur_token = ?";
+
+      bcrypt.hash(req.body.password, 10, function(err, hash) {
+        // Initialisation des valeurs à rentrer dans la BDD
+        var data = {
+          utilisateur_nom:                     req.body.user_name,
+          utilisateur_prenom:                  req.body.user_surname,
+          utilisateur_portable:                req.body.user_phone,
+          utilisateur_date_naissance:          new Date(req.body.user_birthdate),
+          utilisateur_date_modification:       new Date(),
+          utilisateur_date_derniere_connexion: new Date()
+        };
+
+        if (password && password !== "")
+          data.utilisateur_mot_de_passe = hash;
+
+        // On récupère une connexion du pool et on exécute un INSERT
+        pool.query(updateQuery, [data, req.body.token], function(error, result) {
+          if (error) {
+            res.sendStatus(500); 
+          }
+
+          res.sendStatus(200);
+        });
+
+      });
+    }
+    else {
+      res.sendStatus(403);
+    }
+  });
 });
 
 // Export for public usage
