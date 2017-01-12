@@ -50,11 +50,11 @@ router.post('/create', function(req, res) {
             return res.sendStatus(500);
           }
 
-          res.sendStatus(200);
+          return res.sendStatus(200);
         });
       }
       else {
-        res.sendStatus(403);
+        return res.sendStatus(403);
       }
   });
 });
