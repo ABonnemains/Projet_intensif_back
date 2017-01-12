@@ -102,5 +102,68 @@ router.post('/update', function(req, res) {
   });
 });
 
+/*
+  Function: List trajects
+
+  Liste des trajets à proximité de la position de l'utilisateur.
+  * GET
+  * URL : {{url}}/list/:token/:latitude/:longitude
+  * Consumes URL Parameters : { token, longitude, latitude }
+
+  Parameters:
+
+  *  token     : Token de connexion fourni par la méthode login
+  *  latitude  : Latitude de la position de l'utilisateur
+  *  longitude : Longitude de la position de l'utilisateur
+
+  Returns:
+
+  *  403 Forbidden     : Mauvais token ou token expiré
+  *  500 Server Error  : Erreur lors de l'enregistrement dans la base
+  *  200 OK            : Get s'est bien passé
+  *  JSON Array (Trajects) :
+      traject_id          - Identifiant du trajet
+      traject_start_lat   - Latitude du point de départ
+      traject_start_long  - Longitude du point de départ
+      traject_finish_lat  - Latitude du point d'arrivée
+      traject_finish_long - Longitude du point d'arrivée
+
+*/
+router.get('/list/:token/:latitude/:longitude', function(req, res) {
+    loginUtils.checkConnection(req.params.token).then(function(logged) {
+        if (logged) {
+            var minLat = parseFloat(req.params.latitude) - 0.05;
+            var maxLat = parseFloat(req.params.latitude) + 0.05;
+            var minLg  = parseFloat(req.params.longitude) - 0.05;
+            var maxLg  = parseFloat(req.params.longitude) + 0.05;
+
+            var intricateQuery = "SELECT utilisateur_id FROM utilisateur WHERE utilisateur_token = '" + req.params.token + "'";
+            var selectQuery = "SELECT * FROM trajet WHERE (trajet_longitude_depart BETWEEN ? AND ?) AND (trajet_latitude_depart BETWEEN ? AND ?) AND (utilisateur_utilisateur_id IN (" + intricateQuery + ") OR trajet_public=1)";
+            var trajects = [];
+
+            pool.query(selectQuery, [minLg, maxLg, minLat, maxLat], function(err, rows) {
+                if (err) return res.sendStatus(500);
+
+                for (var i = 0; i < rows.length; i++) {
+                    var data = {
+                        traject_id: rows[i].trajet_id,
+                        traject_start_lat: rows[i].trajet_latitude_depart,
+                        traject_start_long: rows[i].trajet_longitude_depart,
+                        traject_finish_lat: rows[i].trajet_latitude_arrivee,
+                        traject_finish_long: rows[i].trajet_longitude_arrivee
+                    };
+
+                    trajects.push(data);
+                }
+
+                return res.status(200).json(trajects);
+            });
+        }
+        else {
+            return res.sendStatus(403);
+        }
+    });
+});
+
 // Export for public usage
 module.exports = router;
