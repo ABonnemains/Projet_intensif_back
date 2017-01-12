@@ -3,13 +3,12 @@
 ![Logo](Logo.png)
 
 ## API Documentation
-# **/route_authentication.js**
-**POST /register**
+**POST /authentication/register**
 ----
-  POST Enregistrer un nouvel utilisateur.
+Enregistrer un nouvel utilisateur.
 
 * **URL**  
-  `/register`
+  `/authentication/register`
 
 * **Method:**  
   `POST`
@@ -36,12 +35,12 @@
     **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
 
 
-**POST /login**
+**POST /authentication/login**
 ----
-  POST Connecter un utilisateur.
+Connecter un utilisateur.
 
   * **URL**  
-    `/login`
+    `/authentication/login`
 
   * **Method:**  
     `POST`
@@ -57,24 +56,157 @@
 
 
   * **Error Response:**
-    * **Code:** 401 <br />
+    * **Code:** 404 <br />
       **Content:** `{ Not Found       : le login de l'utilisateur n'existe pas en base }`
     * **Code:** 500 <br />
-      **Content:** `{ Server Error       : Erreur lors de la lecture ou l'écriture dans la base }``
+      **Content:** `{ Server Error       : Erreur lors de la lecture ou l'écriture dans la base }`
 
 
-# **/route_traject.js**
-**POST /create**
+**POST /authentication/Update**
 ----
-POST Créer un trajet.
+Mise à jour de l'utilisateur.
 
   * **URL**  
-      `/create`
+    `/authentication/Update`
+
+  * **Method:**  
+    `POST`
+
+  *  **URL Params**  
+  `token`                 : Token de connexion fourni par la méthode login  
+  `password`              : Mot de passe du nouvel utilisateur  
+  `password_confirmation` : Confirmation du mot de passe du nouvel utilisateur  
+  `user_name`             : Nom de l'utilisateur  
+  `user_surname`          : Prénom de l'utilisateur  
+  `user_birthdate`        : Date de naissance de l'utilisateur  
+
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Login s'est bien passé `
+
+
+  * **Error Response:**
+    * **Code:** 400 <br />
+      **Content:** `{ Bad Request       : password et password_confirmation différents }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error       : Erreur lors de la lecture ou l'écriture dans la base }`
+
+
+**GET /profile/:token/:login**
+----
+Récuperer le profil de l'utilisateur.      
+  * **URL**  
+    `/profilr/:token/:login`
+
+  * **Method:**  
+    `GET`
+
+  *  **URL Params**  
+  `token`                 : Token de connexion fourni par la méthode login  
+  `login` : Pseudo de l'utilisateur à chercher    
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Login s'est bien passé `
+    * **JSON Object:**  
+      **Content:**  
+      `user_name`      - Nom de l'utilisateur  
+      `user_surname`   - Prénom de l'utilisateur  
+      `user_phone`     - Numéro de téléphone de l'utilisateur  
+      `user_birthdate` - Date de naissance de l'utilisateur  
+
+
+  * **Error Response:**
+    * **Code:** 404 <br />
+      **Content:** `{ Not Found         : le profil demandé n'a pas été trouvé }`
+    * **Code:** 403 <br />
+      **Content:** `{ Forbidden         : le token fourni n'est pas valide }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error       : Erreur lors de la lecture ou l'écriture dans la base }`
+
+
+**GET /top/:token**
+----
+Verification du classement de l'utilisateur.
+
+  * **URL**  
+    `/top/:token`
+
+  * **Method:**  
+    `GET`
+
+  *  **URL Params**  
+    `token`                 : Token de connexion fourni par la méthode login  
+
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Login s'est bien passé `
+    * **JSON Array[Utilisateur]:**  
+      **Content:**  
+      `utilisateur_id`             - Identifiant de l'utilisateur
+      `utilisateur_nom`            - Nom de l'utilisateur  
+      `utilisateur_prenom`         - Prénom de l'utilisateur  
+      `utilisateur_portable`       - Numéro de téléphone de l'utilisateur  
+      `utilisateur_date_naissance` - Date de naissance de l'utilisateur  
+      `utilisateur_score`          - Score de l'utilisateur  
+
+
+  * **Error Response:**
+    * **Code:** 403 <br />
+      **Content:** `{ Forbidden         : le token fourni n'est pas valide }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error       : Erreur lors de la lecture ou l'écriture dans la base }`
+
+
+
+**GET /search/:token/:string**
+----
+Recherche d'utilisateur.
+
+  * **URL**  
+    `/search/:token/:string`
+
+  * **Method:**  
+    `GET`
+
+  *  **URL Params**  
+    `token`                 : Token de connexion fourni par la méthode login  
+    `string`                : Texte contenu dans le champ de recherche
+
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Login s'est bien passé `
+    * **JSON Array[Utilisateur]:**  
+      **Content:**  
+      `utilisateur_id`             - Identifiant de l'utilisateur  
+      `utilisateur_pseudo`         - Pseudo de l'utilisateur  
+
+
+  * **Error Response:**
+    * **Code:** 404 <br />
+      **Content:** `{ Not Found         : aucun profil n'a été trouvé }`
+    * **Code:** 403 <br />
+      **Content:** `{ Forbidden         : le token fourni n'est pas valide }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error       : Erreur lors de la lecture ou l'écriture dans la base }`
+
+
+------------------------------------------------------------
+
+**POST /traject/create**
+----
+Creer un nouveau trajet
+  * **URL**  
+      `/traject/create`
 
   * **Method:**  
       `POST`
 
-  *  **URL Params**  
+  *  **URL Params**
+    `token`                    : Token de connexion fourni par la méthode login  
     `trajet_longitude_depart`  : Longitude du point de départ  
     `trajet_latitude_depart`   : Latitude du point de départ  
     `trajet_longitude_arrivee` : Longitude du point d'arrivée  
@@ -85,7 +217,7 @@ POST Créer un trajet.
 
   * **Success Response:**
     * **Code:** 200 <br />
-      **Content:** ` Register s'est bien passé `
+      **Content:** ` Create s'est bien passé `
 
 
   * **Error Response:**    
@@ -95,13 +227,13 @@ POST Créer un trajet.
       **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
 
 
-# **/route_event.js**
-**POST /create**
+
+**POST /event/create**
 ----
-POST Créer un nouvel évènement.
+Créer un nouvel évènement.
 
   * **URL**  
-      `/create`
+      `/event/create`
 
   * **Method:**  
       `POST`
@@ -117,8 +249,7 @@ POST Créer un nouvel évènement.
 
   * **Success Response:**
     * **Code:** 200 <br />
-      **Content:** ` Create s'est bien passé `
-
+      **Content:** ` Create s'est bien passé `  
 
   * **Error Response:**    
     * **Code:** 403 <br />
@@ -127,9 +258,9 @@ POST Créer un nouvel évènement.
       **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
 
 
-**GET /create**
+**GET /list/:token/:latitude/:longitude**
 ----
-GET Create new event.
+Liste des évènement à proximité de l'utilisateur.
 
   * **Method:**  
       `GET`
@@ -152,13 +283,13 @@ GET Create new event.
       **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
 
 
-# **/route_assist.js**
-**POST /create**
+
+**POST /assist/create**
 ----
-POST Créer une demande d'assistance.
+Créer une demande d'assistance.
 
   * **URL**  
-      `/create`
+      `/assist/create`
 
   * **Method:**  
       `POST`
@@ -170,6 +301,124 @@ POST Créer une demande d'assistance.
       `assistance_latitude`        : Latitude du point d'assistance  
       `utilisateur_id`             : Identifiant de l'utilisateur   
 
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Create s'est bien passé `
+
+
+  * **Error Response:**    
+    * **Code:** 403 <br />
+      **Content:** `{ Forbiddien       : Mauvais token ou token expiré }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
+
+
+
+**POST /mark_accessibility/create**
+----
+Créer une note d'accessibilité pour le trajet.
+
+  * **URL**  
+      `/mark_accessibility/create`
+
+  * **Method:**  
+      `POST`
+
+  *  **URL Params**  
+      `token`             : Token de connexion fourni par la méthode login  
+      `trajet_note`    : Note du trajet  
+      `trajet_id`      : Identifiant du trajet  
+      `utilisateur_id`             : Identifiant de l'utilisateur   
+
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Create s'est bien passé `
+
+
+  * **Error Response:**    
+    * **Code:** 403 <br />
+      **Content:** `{ Forbiddien       : Mauvais token ou token expiré }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
+
+
+
+**POST /mark_object/create**
+----
+Créer une note d'accessibilité pour le trajet.
+
+  * **URL**  
+      `/mark_object/create`
+
+  * **Method:**  
+      `POST`
+
+  *  **URL Params**  
+      `token`             : Token de connexion fourni par la méthode login  
+      `obstacle_note`    : Note de l'obstacle  
+      `obstacle_id`      : Identifiant de l'obstacle  
+      `utilisateur_id`   : Identifiant de l'utilisateur   
+
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Create s'est bien passé `
+
+
+  * **Error Response:**    
+    * **Code:** 403 <br />
+      **Content:** `{ Forbiddien       : Mauvais token ou token expiré }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
+
+
+
+**POST /mark_traject/create**
+----
+Créer une note pour le trajet.
+
+  * **URL**  
+      `/mark_traject/create`
+
+  * **Method:**  
+      `POST`
+
+  *  **URL Params**  
+      `token`             : Token de connexion fourni par la méthode login  
+      `note_trajet_note`    : Note du trajet  
+      `trajet_trajet_id`      : Identifiant du trajet  
+      `utilisateur_id`   : Identifiant de l'utilisateur   
+
+
+  * **Success Response:**
+    * **Code:** 200 <br />
+      **Content:** ` Create s'est bien passé `
+
+
+  * **Error Response:**    
+    * **Code:** 403 <br />
+      **Content:** `{ Forbiddien       : Mauvais token ou token expiré }`
+    * **Code:** 500 <br />
+      **Content:** `{ Server Error      : Erreur lors de l'enregistrement dans la base }`
+
+
+
+**POST /user_event/create**
+----
+Enregistre un nouvel évènement en base.
+
+  * **URL**  
+      `/user_event/create`
+
+  * **Method:**  
+      `POST`
+
+  *  **URL Params**  
+      `token`             : Token de connexion fourni par la méthode login  
+      `utilisateur_id`   : Identifiant de l'utilisateur   
+      `evenement_id`     : Identifiant de l'évènement  
 
   * **Success Response:**
     * **Code:** 200 <br />
