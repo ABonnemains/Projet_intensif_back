@@ -140,6 +140,7 @@ router.post('/login', function(req, res) {
   *  user_name             : Nom de l'utilisateur
   *  user_surname          : Prénom de l'utilisateur
   *  user_birthdate        : Date de naissance de l'utilisateur
+  *  user_handicapped      : True si handicap moteur
 
   Returns:
 
@@ -166,7 +167,8 @@ router.post('/update', function(req, res) {
           utilisateur_prenom:                  req.body.user_surname,
           utilisateur_date_naissance:          new Date(req.body.user_birthdate),
           utilisateur_date_modification:       new Date(),
-          utilisateur_date_derniere_connexion: new Date()
+          utilisateur_date_derniere_connexion: new Date(),
+          utilisateur_handicape:               req.body.user_handicapped
         };
 
         if (req.body.password && req.body.password !== "")
@@ -213,6 +215,7 @@ router.post('/update', function(req, res) {
       user_surname   - Prénom de l'utilisateur
       user_phone     - Numéro de téléphone de l'utilisateur
       user_birthdate - Date de naissance de l'utilisateur
+      user_handicapped - Booleen (handicap moteur ou non)
 
 */
 router.get('/profile/:token/:login', function(req, res) {
@@ -229,7 +232,8 @@ router.get('/profile/:token/:login', function(req, res) {
             user_name     : rows[0].utilisateur_nom,
             user_surname  : rows[0].utilisateur_prenom,
             user_phone    : rows[0].utilisateur_portable,
-            user_birthdate: new Date(rows[0].utilisateur_date_naissance).getTime()
+            user_birthdate: new Date(rows[0].utilisateur_date_naissance).getTime(),
+            user_handicapped: rows[0].utilisateur_handicape
           }
 
           return res.status(200).json(data);
