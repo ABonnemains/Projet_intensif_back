@@ -59,9 +59,8 @@ router.post('/register', function(req, res) {
     // On récupère une connexion du pool et on exécute un INSERT
     pool.query('INSERT INTO utilisateur SET ?', data, function(error, result) {
       if (error) {
-        res.sendStatus(500);
+        return res.sendStatus(500);
       }
-
       res.sendStatus(200);
     });
 
@@ -95,7 +94,7 @@ router.post('/login', function(req, res) {
 
   // Vérification de la présence du login en base
   pool.query(selectQuery, req.body.login, function(error, rows) {
-    if (error) res.sendStatus(500);
+    if (error) return res.sendStatus(500);
 
     if (rows[0].count === 0){
       res.sendStatus(404);
@@ -103,7 +102,7 @@ router.post('/login', function(req, res) {
     else {
       // Vérification du mot de passe
       bcrypt.compare(req.body.password, rows[0].mdp, function(err, rightPass) {
-        if (err) res.sendStatus(500);
+        if (err) return res.sendStatus(500);
         console.log(rightPass);
 
         if (rightPass) {
@@ -112,7 +111,7 @@ router.post('/login', function(req, res) {
 
           // Enregistrement du token en base
           pool.query(updateQuery, [token, new Date(), req.body.login], function(err2, result) {
-            if (err2) res.sendStatus(500);
+            if (err2) return res.sendStatus(500);
 
             res.status(200).json({token: token});
           });
@@ -177,7 +176,7 @@ router.post('/update', function(req, res) {
         // On récupère une connexion du pool et on exécute un INSERT
         pool.query(updateQuery, [data, req.body.token], function(error, result) {
           if (error) {
-            res.sendStatus(500);
+            return res.sendStatus(500);
           }
 
           res.sendStatus(200);
@@ -224,7 +223,7 @@ router.get('/profile/:token/:login', function(req, res) {
       var selectQuery = "SELECT * FROM utilisateur WHERE utilisateur_pseudo = ?";
 
       pool.query(selectQuery, req.params.login, function(err, rows) {
-        if (err) res.sendStatus(500);
+        if (err) return res.sendStatus(500);
 
         if (rows.length > 0) {
           var data = {
@@ -280,7 +279,7 @@ router.get('/top/:token', function(req, res) {
       var selectQuery = "SELECT * FROM utilisateur ORDER BY utilisateur_score DESC LIMIT 100";
 
       pool.query(selectQuery, function(err, rows) {
-        if (err) res.sendStatus(500);
+        if (err) return res.sendStatus(500);
 
         var users = [];
         for (var i = 0; i < rows.length; i++) {
@@ -337,7 +336,7 @@ router.get('/search/:token/:sstring', function(req, res) {
       var selectQuery = "SELECT * FROM utilisateur WHERE utilisateur_pseudo LIKE ";
 
       pool.query(selectQuery + "'%" + req.params.sstring + "%'" , function(err, rows) {
-        if (err) res.sendStatus(500);
+        if (err) return res.sendStatus(500);
 
         var users = [];
         for (var i = 0; i < rows.length; i++) {
