@@ -31,6 +31,8 @@ var router = express.Router();
 
 */
 router.post('/create', function(req, res) {
+    console.log(req.body);
+    
     loginUtils.checkConnection(req.body.token).then(function(logged) {
         if (logged) {
             var data = {
