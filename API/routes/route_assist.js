@@ -90,7 +90,7 @@ router.get('/list/:token/:latitude/:longitude', function(req, res) {
             var minLg  = parseFloat(req.params.longitude) - 0.05;
             var maxLg  = parseFloat(req.params.longitude) + 0.05;
 
-            var selectQuery = "SELECT * FROM assistance WHERE (trajet_longitude_depart BETWEEN ? AND ?) AND (trajet_latitude_depart BETWEEN ? AND ?)";
+            var selectQuery = "SELECT * FROM assistance WHERE (assistance_longitude BETWEEN ? AND ?) AND (assistance_latitude BETWEEN ? AND ?)";
             var assists = [];
 
             pool.query(selectQuery, [minLg, maxLg, minLat, maxLat], function(err, rows) {
@@ -100,7 +100,7 @@ router.get('/list/:token/:latitude/:longitude', function(req, res) {
                     var data = {
                         assist_id: rows[i].assistance_id,
                         assist_lat: rows[i].assistance_latitude,
-                        asist_long: rows[i].asistance_longitude
+                        assist_long: rows[i].assistance_longitude
                     };
 
                     assists.push(data);
