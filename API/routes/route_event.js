@@ -59,7 +59,7 @@ router.post('/create', function(req, res) {
 /*
   Function: List events
 
-  Liste des positions des évènements à proximité.
+  Liste des évènements à proximité de la position de l'utilisateur.
   * GET
   * URL : {{url}}/list/:token/:latitude/:longitude
   * Consumes URL Parameters : { token, longitude, latitude }
@@ -67,8 +67,8 @@ router.post('/create', function(req, res) {
   Parameters:
 
   *  token     : Token de connexion fourni par la méthode login
-  *  latitude  : Nom du nouvel évènement
-  *  longitude : Longitude de l'évènement
+  *  latitude  : Latitude de la position de l'utilisateur
+  *  longitude : Longitude de la position de l'utilisateur
 
   Returns:
 
