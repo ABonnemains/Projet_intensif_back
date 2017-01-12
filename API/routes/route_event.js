@@ -80,10 +80,15 @@ router.post('/create', function(req, res) {
 router.get('/list/:token/:latitude/:longitude', function(req, res) {
     loginUtils.checkConnection(req.params.token).then(function(logged) {
         if (logged) {
-            var selectQuery = "SELECT * FROM evenement";
+            var minLat = parseFloat(req.params.latitude) - 0.05;
+            var maxLat = parseFloat(req.params.latitude) + 0.05;
+            var minLg  = parseFloat(req.params.longitude) - 0.05;
+            var maxLg  = parseFloat(req.params.longitude) + 0.05;
+
+            var selectQuery = "SELECT * FROM evenement WHERE (evenement_longitude BETWEEN ? AND ?) AND (evenement_latitude BETWEEN ? AND ?)";
             var events = [];
 
-            pool.query(selectQuery, function(err, rows) {
+            pool.query(selectQuery, [minLg, maxLg, minLat, maxLat], function(err, rows) {
                 if (err) return res.sendStatus(500);
 
                 for (var i = 0; i < rows.length; i++) {
