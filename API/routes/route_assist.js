@@ -57,5 +57,63 @@ router.post('/create', function(req, res) {
   });
 });
 
+/*
+  Function: List Assists
+
+  Liste des demandes d'assistance à proximité de la position de l'utilisateur.
+  * GET
+  * URL : {{url}}/list/:token/:latitude/:longitude
+  * Consumes URL Parameters : { token, longitude, latitude }
+
+  Parameters:
+
+  *  token     : Token de connexion fourni par la méthode login
+  *  latitude  : Latitude de la position de l'utilisateur
+  *  longitude : Longitude de la position de l'utilisateur
+
+  Returns:
+
+  *  403 Forbidden     : Mauvais token ou token expiré
+  *  500 Server Error  : Erreur lors de l'enregistrement dans la base
+  *  200 OK            : Get s'est bien passé
+  *  JSON Array (Assists) :
+      assist_id    - Identifiant du trajet
+      assist_lat   - Latitude de l'assistance
+      assist_long  - Longitude de l'assistance
+
+*/
+router.get('/list/:token/:latitude/:longitude', function(req, res) {
+    loginUtils.checkConnection(req.params.token).then(function(logged) {
+        if (logged) {
+            var minLat = parseFloat(req.params.latitude) - 0.05;
+            var maxLat = parseFloat(req.params.latitude) + 0.05;
+            var minLg  = parseFloat(req.params.longitude) - 0.05;
+            var maxLg  = parseFloat(req.params.longitude) + 0.05;
+
+            var selectQuery = "SELECT * FROM assistance WHERE (trajet_longitude_depart BETWEEN ? AND ?) AND (trajet_latitude_depart BETWEEN ? AND ?)";
+            var assists = [];
+
+            pool.query(selectQuery, [minLg, maxLg, minLat, maxLat], function(err, rows) {
+                if (err) return res.sendStatus(500);
+
+                for (var i = 0; i < rows.length; i++) {
+                    var data = {
+                        assist_id: rows[i].assistance_id,
+                        assist_lat: rows[i].assistance_latitude,
+                        asist_long: rows[i].asistance_longitude
+                    };
+
+                    assists.push(data);
+                }
+
+                return res.status(200).json(assists);
+            });
+        }
+        else {
+            return res.sendStatus(403);
+        }
+    });
+});
+
 // Export for public usage
 module.exports = router;
