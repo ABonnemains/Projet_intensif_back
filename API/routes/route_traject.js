@@ -53,11 +53,11 @@ router.post('/create', function(req, res) {
             return res.sendStatus(500);
           }
 
-          res.sendStatus(200);
+          return res.sendStatus(200);
         });
       }
       else {
-        res.sendStatus(403);
+        return res.sendStatus(403);
       }
   });
 });
@@ -90,14 +90,14 @@ router.post('/update', function(req, res) {
         // On récupère une connexion du pool et on exécute un INSERT
         pool.query('UPDATE trajet SET trajet_public=? WHERE trajet_id=?', [req.body.trajet_public, req.body.trajet_id], function(error, result) {
           if (error) {
-            res.sendStatus(500);
+            return res.sendStatus(500);
           }
 
-          res.sendStatus(200);
+          return res.sendStatus(200);
         });
       }
       else {
-        res.sendStatus(403);
+        return res.sendStatus(403);
       }
   });
 });

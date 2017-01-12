@@ -38,7 +38,7 @@ var router = express.Router();
 router.post('/register', function(req, res) {
   // Si le mot de passe et la confirmation sont différentes, c'est une 400 Bad Request
   if (req.body.password !== req.body.password_confirmation)
-    res.sendStatus(400);
+    return res.sendStatus(400);
 
   // Chiffrage du mot de passe
   bcrypt.hash(req.body.password, 10, function(err, hash) {
@@ -61,7 +61,7 @@ router.post('/register', function(req, res) {
       if (error) {
         return res.sendStatus(500);
       }
-      res.sendStatus(200);
+      return res.sendStatus(200);
     });
 
   });
@@ -97,13 +97,12 @@ router.post('/login', function(req, res) {
     if (error) return res.sendStatus(500);
 
     if (rows[0].count === 0){
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
     else {
       // Vérification du mot de passe
       bcrypt.compare(req.body.password, rows[0].mdp, function(err, rightPass) {
         if (err) return res.sendStatus(500);
-        console.log(rightPass);
 
         if (rightPass) {
           // Création d'un token de connexion
@@ -113,11 +112,11 @@ router.post('/login', function(req, res) {
           pool.query(updateQuery, [token, new Date(), req.body.login], function(err2, result) {
             if (err2) return res.sendStatus(500);
 
-            res.status(200).json({token: token});
+            return res.status(200).json({token: token});
           });
         }
         else {
-          res.sendStatus(401);
+          return res.sendStatus(401);
         }
       });
     }
@@ -154,7 +153,7 @@ router.post('/update', function(req, res) {
     if (logged) {
       // Si changement de mot de passe, les deux mots de passe doivent correspondre
       if (req.body.password && req.body.password !== password_confirmation) {
-        res.sendStatus(400);
+        return res.sendStatus(400);
       }
 
       // requête SQL
@@ -179,13 +178,13 @@ router.post('/update', function(req, res) {
             return res.sendStatus(500);
           }
 
-          res.sendStatus(200);
+          return res.sendStatus(200);
         });
 
       });
     }
     else {
-      res.sendStatus(403);
+      return res.sendStatus(403);
     }
   });
 });
@@ -233,15 +232,15 @@ router.get('/profile/:token/:login', function(req, res) {
             user_birthdate: new Date(rows[0].utilisateur_date_naissance).getTime()
           }
 
-          res.status(200).json(data);
+          return res.status(200).json(data);
         }
         else {
-          res.sendStatus(404);
+          return res.sendStatus(404);
         }
       });
     }
     else {
-      res.sendStatus(403);
+      return res.sendStatus(403);
     }
   });
 });
@@ -295,12 +294,12 @@ router.get('/top/:token', function(req, res) {
           users.push(data);
         }
 
-        if (users.length > 0) res.status(200).json(users);
-        else res.sendStatus(404);
+        if (users.length > 0) return res.status(200).json(users);
+        else return res.sendStatus(404);
       });
     }
     else {
-      res.sendStatus(403);
+      return res.sendStatus(403);
     }
   });
 });
@@ -348,12 +347,12 @@ router.get('/search/:token/:sstring', function(req, res) {
           users.push(data);
         }
 
-        if (users.length > 0) res.status(200).json(users);
-        else res.sendStatus(404);
+        if (users.length > 0) return res.status(200).json(users);
+        else return res.sendStatus(404);
       });
     }
     else {
-      res.sendStatus(403);
+      return res.sendStatus(403);
     }
   });
 });
