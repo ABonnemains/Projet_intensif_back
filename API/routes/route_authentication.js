@@ -217,6 +217,7 @@ router.post('/update', function(req, res) {
   *  500 Server Error      : Erreur lors de la lecture dans la base
   *  200 OK                : Get s'est bien passé
   *  JSON Object :
+      user_id        - Identifiant d l'utilisateur
       user_name      - Nom de l'utilisateur
       user_surname   - Prénom de l'utilisateur
       user_phone     - Numéro de téléphone de l'utilisateur
@@ -235,6 +236,7 @@ router.get('/profile/:token/:login', function(req, res) {
 
         if (rows.length > 0) {
           var data = {
+            user_id       : rows[0].utilisateur_id,
             user_name     : rows[0].utilisateur_nom,
             user_surname  : rows[0].utilisateur_prenom,
             user_phone    : rows[0].utilisateur_portable,
