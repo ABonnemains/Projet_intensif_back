@@ -44,7 +44,7 @@ router.post('/create', function(req, res) {
             // On récupère une connexion du pool et on exécute un INSERT
             pool.query('INSERT INTO evenement SET ?', data, function(error, result) {
                 if (error) {
-                    res.sendStatus(500);
+                    return res.sendStatus(500);
                 }
 
                 res.sendStatus(200);
@@ -84,7 +84,7 @@ router.get('/list/:token/:latitude/:longitude', function(req, res) {
             var events = [];
 
             pool.query(selectQuery, function(err, rows) {
-                if (err) res.sendStatus(500);
+                if (err) return res.sendStatus(500);
 
                 for (var i = 0; i < rows.length; i++) {
                     var data = {

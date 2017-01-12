@@ -50,7 +50,7 @@ router.post('/create', function(req, res) {
         // On récupère une connexion du pool et on exécute un INSERT
         pool.query('INSERT INTO trajet SET ?', data, function(error, result) {
           if (error) {
-            res.sendStatus(500);
+            return res.sendStatus(500);
           }
 
           res.sendStatus(200);
