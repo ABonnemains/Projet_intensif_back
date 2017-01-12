@@ -36,6 +36,8 @@ var router = express.Router();
 
 */
 router.post('/register', function(req, res) {
+  console.log(req.body);
+
   // Si le mot de passe et la confirmation sont différentes, c'est une 400 Bad Request
   if (req.body.password !== req.body.password_confirmation)
     return res.sendStatus(400);
@@ -88,6 +90,8 @@ router.post('/register', function(req, res) {
 
 */
 router.post('/login', function(req, res) {
+  console.log(req.body);
+
   // requêtes SQL
   var selectQuery = 'SELECT count(utilisateur_id) as count, utilisateur_mot_de_passe as mdp FROM utilisateur WHERE utilisateur_pseudo = ?';
   var updateQuery = 'UPDATE utilisateur SET utilisateur_token = ?, utilisateur_date_derniere_connexion = ? WHERE utilisateur_pseudo = ?';
@@ -150,6 +154,8 @@ router.post('/login', function(req, res) {
 
 */
 router.post('/update', function(req, res) {
+  console.log(req.body);
+  
   loginUtils.checkConnection(req.body.token).then(function(logged) {
     if (logged) {
       // Si changement de mot de passe, les deux mots de passe doivent correspondre
