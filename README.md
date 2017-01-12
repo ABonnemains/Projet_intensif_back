@@ -14,7 +14,7 @@ Enregistrer un nouvel utilisateur.
   `POST`
 
 *  **URL Params**  
-  `login` : Pseudo du nouvel utilisateur  
+  `login`    : Pseudo du nouvel utilisateur  
   `password` : Mot de passe du nouvel utilisateur   
   `password_confirmation` : Confirmation du mot de passe du nouvel utilisateur  
   `user_name`     : Nom de l'utilisateur  
@@ -46,7 +46,7 @@ Connecter un utilisateur.
     `POST`
 
   *  **URL Params**  
-    `login` : Pseudo de l'utilisateur  
+    `login`    : Pseudo de l'utilisateur  
     `password` : Mot de passe de l'utilisateur   
 
 
@@ -95,7 +95,7 @@ Mise à jour de l'utilisateur.
 
 **GET /profile/:token/:login**
 ----
-Récuperer le profil de l'utilisateur.      
+Récupérer le profil de l'utilisateur.      
   * **URL**  
     `/profilr/:token/:login`
 
@@ -103,7 +103,7 @@ Récuperer le profil de l'utilisateur.
     `GET`
 
   *  **URL Params**  
-  `token`                 : Token de connexion fourni par la méthode login  
+  `token` : Token de connexion fourni par la méthode login  
   `login` : Pseudo de l'utilisateur à chercher    
 
   * **Success Response:**
@@ -128,7 +128,7 @@ Récuperer le profil de l'utilisateur.
 
 **GET /top/:token**
 ----
-Verification du classement de l'utilisateur.
+Vérification du classement de l'utilisateur.
 
   * **URL**  
     `/top/:token`
@@ -137,7 +137,7 @@ Verification du classement de l'utilisateur.
     `GET`
 
   *  **URL Params**  
-    `token`                 : Token de connexion fourni par la méthode login  
+    `token` : Token de connexion fourni par la méthode login  
 
 
   * **Success Response:**
@@ -172,7 +172,7 @@ Recherche d'utilisateur.
     `GET`
 
   *  **URL Params**  
-    `token`                 : Token de connexion fourni par la méthode login  
+    `token`: Token de connexion fourni par la méthode login  
     `string`                : Texte contenu dans le champ de recherche
 
 
@@ -326,10 +326,10 @@ Créer une note d'accessibilité pour le trajet.
       `POST`
 
   *  **URL Params**  
-      `token`             : Token de connexion fourni par la méthode login  
+      `token`          : Token de connexion fourni par la méthode login  
       `trajet_note`    : Note du trajet  
       `trajet_id`      : Identifiant du trajet  
-      `utilisateur_id`             : Identifiant de l'utilisateur   
+      `utilisateur_id` : Identifiant de l'utilisateur   
 
 
   * **Success Response:**
@@ -356,7 +356,7 @@ Créer une note d'accessibilité pour le trajet.
       `POST`
 
   *  **URL Params**  
-      `token`             : Token de connexion fourni par la méthode login  
+      `token`            : Token de connexion fourni par la méthode login  
       `obstacle_note`    : Note de l'obstacle  
       `obstacle_id`      : Identifiant de l'obstacle  
       `utilisateur_id`   : Identifiant de l'utilisateur   
